@@ -7,11 +7,18 @@ import { join } from "node:path";
 const LINE =
   "My calendar says 'quick sync' but my soul hears 'hostage situation,' so I nod along like a bobblehead with a mortgage and a mute button.";
 
+// The gate reads a single line of 1-199 characters, so the entry must
+// be exactly one line: take the first line and trim stray whitespace.
+function normalizeEntry(line: string): string {
+  return line.split("\n")[0].trim();
+}
+
 function buildEntry(line: string): string {
-  if (line.length < 1 || line.length > 199) {
-    throw new Error(`entry must be 1-199 characters, got ${line.length}`);
+  const entry = normalizeEntry(line);
+  if (entry.length < 1 || entry.length > 199) {
+    throw new Error(`entry must be 1-199 characters, got ${entry.length}`);
   }
-  return line;
+  return entry;
 }
 
 function writeEntry(outDir: string, entry: string): void {
